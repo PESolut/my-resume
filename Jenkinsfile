@@ -1,11 +1,16 @@
 pipeline {
-  agent any
+  agent none
   stages {
-    stage('Checkout Code') {
+    stage('Use Github Token') {
       steps {
-        git(url: 'https://github.com/PESolut/my-resume.git', branch: 'dev')
+        sh '''curl -H "Authorization: token ${GITHUB_TOKEN}" \\
+     https://api.github.com/repos/PESolut/my-resume/contents/Jenkinsfile
+'''
       }
     }
 
+  }
+  environment {
+    GITHUB_TOKEN = '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'
   }
 }
