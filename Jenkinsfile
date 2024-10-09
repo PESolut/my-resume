@@ -1,5 +1,5 @@
 pipeline {
-  agent none
+  agent any
   stages {
     stage('checkout code') {
       steps {
@@ -9,6 +9,6 @@ pipeline {
 
   }
   environment {
-    GITHUB_TOKEN = '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'
+    GITHUB_TOKEN = 'credentials(\'6622c479-a233-4527-841f-336bf79a1f5b\')'
   }
 }
