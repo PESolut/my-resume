@@ -3,7 +3,9 @@ import React from 'react';
 const Header = () => {
   return (
     <header id="header" className="header d-flex flex-column justify-content-center">
-      <i className="header-toggle d-xl-none bi bi-list"></i>
+      <button className="header-toggle d-xl-none" aria-label="Toggle navigation">
+        <i className="bi bi-list"></i>
+      </button>
       
       
       <nav id="navmenu" className="navmenu">
