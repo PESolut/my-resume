@@ -9,7 +9,7 @@ This project is a React-based portfolio website converted from a vanilla HTML te
 3. Run `npm start` to start the development server
 4. Open [http://localhost:3000](http://localhost:3000) to view it in your browser
 
-## Available Scripts
+## Available Scripts:
 
 In the project directory, you can run:
 
