@@ -17,7 +17,7 @@ pipeline {
                 }
             }
         }
-        stage('Print Current Directory') {
+        stage('Print Current Dir') {
             steps {
                 sh 'pwd'
             }
