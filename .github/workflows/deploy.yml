@@ -12,6 +12,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -32,7 +33,7 @@ jobs:
   build-and-push-docker:
     needs: build-and-deploy
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Docker Buildx
@@ -47,4 +48,5 @@ jobs:
         with:
           context: ./react-fe
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/your-app-name:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/portfolio-repo:latest
+
