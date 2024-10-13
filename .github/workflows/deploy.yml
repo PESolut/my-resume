@@ -36,17 +36,33 @@ jobs:
     if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+      
+      - name: Install dependencies
+        working-directory: ./react-fe
+        run: npm ci
+      
+      - name: Build React app
+        working-directory: ./react-fe
+        run: npm run build
+      
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+      
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: ./react-fe
+          file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USER }}/portfolio-repo:latest
-
