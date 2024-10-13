@@ -81,6 +81,6 @@ jobs:
             echo "Removing existing container..."
             docker rm portfolio-container || echo "No container to remove"
             echo "Starting new container..."
-            docker run -d --name portfolio-container -p 80:80 '"$DOCKERHUB_USER"'/portfolio-repo:latest || { echo "Docker run failed"; exit 1; }
+            docker run -d --name portfolio-container -p 3000:3000 '"$DOCKERHUB_USER"'/portfolio-repo:latest || { echo "Docker run failed"; exit 1; }
             echo "Deployment completed successfully"
           '
