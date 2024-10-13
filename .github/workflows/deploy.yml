@@ -46,3 +46,21 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USER }}/portfolio-repo:latest
+
+  deploy-to-ec2:
+    needs: build-and-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to EC2
+        env:
+          PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+          USER: ${{ secrets.EC2_USER }}
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} '
+            docker pull ${{ secrets.DOCKERHUB_USER }}/portfolio-repo:latest
+            docker stop portfolio-container || true
+            docker rm portfolio-container || true
+            docker run -d --name portfolio-container -p 80:80 ${{ secrets.DOCKERHUB_USER }}/portfolio-repo:latest
+          '
