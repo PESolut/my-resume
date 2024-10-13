@@ -48,5 +48,5 @@ jobs:
         with:
           context: ./react-fe
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/portfolio-repo:latest
+          tags: ${{ secrets.DOCKERHUB_USER }}/portfolio-repo:latest
 
