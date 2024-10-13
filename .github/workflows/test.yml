@@ -1,5 +1,5 @@
 name: Build-And-Test
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+run-name: ${{ github.actor }} is building and testing the React app
 
 on:
     push:
@@ -41,10 +41,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Push to main
         run: |
-          git config user.name PESolut
-          git config user.email jahaadpetty@pursuit.org
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
           git checkout main
           git merge origin/dev
           git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
