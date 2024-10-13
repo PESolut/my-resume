@@ -4,11 +4,13 @@ run-name: ${{ github.actor }} is deploying the React app
 on:
     push:
         branches: [ main ]
-    pull_request:
-        branches: [ main ]
+    workflow_run:
+        workflows: ["Build-And-Test"]
+        types:
+        - completed
 
 jobs:
-    build-an-deploy:
+    build-and-deploy:
         runs-on: ubuntu-latest
 
         steps:
