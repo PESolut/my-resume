@@ -56,11 +56,28 @@ jobs:
           PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           HOST: ${{ secrets.EC2_HOST }}
           USER: ${{ secrets.EC2_USER }}
+          DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
         run: |
+          # Check for presence of environment variables
+          echo "Checking environment variables..."
+          [ -z "$PRIVATE_KEY" ] && echo "PRIVATE_KEY is missing" || echo "PRIVATE_KEY is set"
+          [ -z "$HOST" ] && echo "HOST is missing" || echo "HOST is set"
+          [ -z "$USER" ] && echo "USER is missing" || echo "USER is set"
+          [ -z "$DOCKERHUB_USER" ] && echo "DOCKERHUB_USER is missing" || echo "DOCKERHUB_USER is set"
+          
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} '
-            docker pull ${{ secrets.DOCKERHUB_USER }}/portfolio-repo:latest
-            docker stop portfolio-container || true
-            docker rm portfolio-container || true
-            docker run -d --name portfolio-container -p 80:80 ${{ secrets.DOCKERHUB_USER }}/portfolio-repo:latest
+          # Add verbose output to SSH command
+          ssh -v -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} '
+            # Add error handling and logging
+            set -e
+            echo "Starting deployment on EC2"
+            echo "Pulling Docker image..."
+            docker pull '"$DOCKERHUB_USER"'/portfolio-repo:latest || { echo "Docker pull failed"; exit 1; }
+            echo "Stopping existing container..."
+            docker stop portfolio-container || echo "No container to stop"
+            echo "Removing existing container..."
+            docker rm portfolio-container || echo "No container to remove"
+            echo "Starting new container..."
+            docker run -d --name portfolio-container -p 80:80 '"$DOCKERHUB_USER"'/portfolio-repo:latest || { echo "Docker run failed"; exit 1; }
+            echo "Deployment completed successfully"
           '
