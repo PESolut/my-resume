@@ -6,6 +6,7 @@ import AOS from 'aos';
 import './main.css';
 import 'aos/dist/aos.css'; // Import AOS styles
 import AboutSection from './components/AboutSection';
+import SkillsSection from './components/SkillsSection';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
       <Header />
       <Hero />
       <AboutSection />
+      <SkillsSection />
     </div>
   );
 }
