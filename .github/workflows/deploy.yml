@@ -66,8 +66,11 @@ jobs:
           [ -z "$DOCKERHUB_USER" ] && echo "DOCKERHUB_USER is missing" || echo "DOCKERHUB_USER is set"
           
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          # Add verbose output to SSH command
-          ssh -v -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} '
+          # Test SSH connection with maximum verbosity
+          ssh -vvv -o StrictHostKeyChecking=no -o ConnectTimeout=60 -i private_key ${USER}@${HOST} 'echo "SSH connection successful"'
+          
+          # If the test is successful, proceed with the deployment
+          ssh -vvv -o StrictHostKeyChecking=no -o ConnectTimeout=60 -i private_key ${USER}@${HOST} '
             # Add error handling and logging
             set -e
             echo "Starting deployment on EC2"
