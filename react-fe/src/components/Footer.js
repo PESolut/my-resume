@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Typed from 'typed.js';
+import axios from 'axios';
 
 const phrases = [
   "Building innovative software solutions from front to back.",
@@ -28,7 +29,10 @@ const phrases = [
 
 const Footer = () => {
   const typedRef = useRef(null);
+  const [currentTime, setCurrentTime] = useState('');
+  const [currentDate, setCurrentDate] = useState('')
 
+  // Animation useEffect
   useEffect(() => {
     const options = {
       strings: phrases,
@@ -44,7 +48,7 @@ const Footer = () => {
     const typed = new Typed(typedRef.current, options);
 
     const changeInterval = setInterval(() => {
-      const randomDelay = Math.floor(Math.random() * (20000 - 10000 + 1)) + 10000; // Random delay between 10-20 seconds
+      const randomDelay = Math.floor(Math.random() * (20000 - 10000 + 1)) + 10000;
       setTimeout(() => {
         typed.reset();
       }, randomDelay);
@@ -53,6 +57,30 @@ const Footer = () => {
     return () => {
       typed.destroy();
       clearInterval(changeInterval);
+    };
+  }, []);
+
+  // Time fetching useEffect
+  useEffect(() => {
+    const fetchWorldTime = async () => {
+      try {
+        const response = await axios.get('http://worldtimeapi.org/api/ip');
+        const { datetime } = response.data;
+        const formattedTime = new Date(datetime).toLocaleString();
+        const formattedDate = formattedTime.split(',')[0].split('/')[2];
+        setCurrentDate(formattedDate);
+        setCurrentTime(formattedTime);
+      } catch (error) {
+        console.error('Error fetching world time:', error);
+        setCurrentTime('Unable to fetch time');
+      }
+    };
+
+    fetchWorldTime();
+    const timeInterval = setInterval(fetchWorldTime, 60000);
+
+    return () => {
+      clearInterval(timeInterval);
     };
   }, []);
 
@@ -67,8 +95,11 @@ const Footer = () => {
         <div className="container">
           <div className="copyright">
             <span>Copyright</span> 
-            <strong className="px-1 sitename">Jahaad Petty 2024</strong> 
+            <strong className="px-1 sitename">Jahaad Petty {currentDate || 2024}</strong> 
             <span>All Rights Reserved</span>
+          </div>
+          <div className="current-time">
+            {currentTime ? <>Current Time: {currentTime}</> : <></>}
           </div>
         </div>
       </div>
