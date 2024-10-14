@@ -90,7 +90,7 @@ const Footer = () => {
         <h3 className="sitename">Jahaad Petty</h3>
         <p><span ref={typedRef}></span></p>
         <div className="social-links d-flex justify-content-center">
-          <a href=""><i className="bi bi-linkedin"></i></a>
+          <a href="https://www.linkedin.com/in/jahaad-petty-321066249/"><i className="bi bi-linkedin"></i></a>
         </div>
         <div className="container">
           <div className="copyright">
