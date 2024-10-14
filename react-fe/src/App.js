@@ -9,6 +9,7 @@ import AboutSection from './components/AboutSection';
 import SkillsSection from './components/SkillsSection';
 import ResumeSection from './components/ResumeSection';
 import ContactSection from './components/ContactSection';
+import Footer from './components/Footer';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
       <SkillsSection />
       <ResumeSection />
       <ContactSection />
+      <Footer />
     </div>
   );
 }
