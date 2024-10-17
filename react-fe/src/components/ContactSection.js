@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import emailjs from '@emailjs/browser';
 
 const InfoItem = ({ icon, title, content }) => (
   <div className="info-item d-flex" data-aos="fade-up">
@@ -44,10 +45,18 @@ const ContactSection = () => {
     e.preventDefault();
     setFormStatus({ loading: true, error: '', success: false });
 
-    // Simulating form submission
     try {
-      // Replace this with actual form submission logic
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await emailjs.send(
+        'service_fh2hdpq', // Replace with your EmailJS service ID
+        'template_e9m3r0i', // Replace with your EmailJS template ID
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        },
+        'oSoEXnlpqvdtJfYEy' // Replace with your EmailJS user ID
+      );
       setFormStatus({ loading: false, error: '', success: true });
       setFormData({ name: '', email: '', subject: '', message: '' });
     } catch (error) {
@@ -59,15 +68,15 @@ const ContactSection = () => {
     <section id="contact" className="contact section">
       <div className="container section-title" data-aos="fade-up">
         <h2>Contact</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+        <p>Get in touch with me for any inquiries or collaborations. I'm always excited to hear about new opportunities and projects.</p>
       </div>
 
       <div className="container" data-aos="fade" data-aos-delay="100">
         <div className="row gy-4">
           <div className="col-lg-4">
-            <InfoItem icon="geo-alt" title="Address" content="A108 Adam Street, New York, NY 535022" />
-            <InfoItem icon="telephone" title="Call Us" content="+1 5589 55488 55" />
-            <InfoItem icon="envelope" title="Email Us" content="info@example.com" />
+            {/* <InfoItem icon="geo-alt" title="Address" content="A108 Adam Street, New York, NY 535022" /> */}
+            {/* <InfoItem icon="telephone" title="Call Us" content="+1 5589 55488 55" /> */}
+            <InfoItem icon="envelope" title="Email Us" content="Admin@jp-tech.dev" />
           </div>
 
           <div className="col-lg-8">
